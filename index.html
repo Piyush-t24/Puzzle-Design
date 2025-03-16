@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arrange 9 Squares Puzzle</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Arrange the 9 Squares Puzzle</h1>
+    <div class="container">
+      <!-- Reference Image -->
+      <div class="reference">
+        <img src="./assets/Puzzle.png" alt="Reference Puzzle" />
+        <p>Reference Puzzle</p>
+      </div>
+      <!-- Puzzle Grid -->
+      <div class="grid">
+        <div class="cell" id="cell-1"></div>
+        <div class="cell" id="cell-2"></div>
+        <div class="cell" id="cell-3"></div>
+        <div class="cell" id="cell-4"></div>
+        <div class="cell" id="cell-5"></div>
+        <div class="cell" id="cell-6"></div>
+        <div class="cell" id="cell-7"></div>
+        <div class="cell" id="cell-8"></div>
+        <div class="cell" id="cell-9"></div>
+      </div>
+    </div>
+
+    <!-- Draggable Tiles -->
+    <div class="pieces">
+      <img
+        src="./assets/tile1.png"
+        class="piece"
+        draggable="true"
+        data-id="1"
+      />
+      <img
+        src="./assets/tile2.png"
+        class="piece"
+        draggable="true"
+        data-id="2"
+      />
+      <img
+        src="./assets/tile3.png"
+        class="piece"
+        draggable="true"
+        data-id="3"
+      />
+      <img
+        src="./assets/tile4.png"
+        class="piece"
+        draggable="true"
+        data-id="4"
+      />
+      <img
+        src="./assets/tile5.png"
+        class="piece"
+        draggable="true"
+        data-id="5"
+      />
+      <img
+        src="./assets/tile6.png"
+        class="piece"
+        draggable="true"
+        data-id="6"
+      />
+      <img
+        src="./assets/tile7.png"
+        class="piece"
+        draggable="true"
+        data-id="7"
+      />
+      <img
+        src="./assets/tile8.png"
+        class="piece"
+        draggable="true"
+        data-id="8"
+      />
+      <img
+        src="./assets/tile9.png"
+        class="piece"
+        draggable="true"
+        data-id="9"
+      />
+    </div>
+
+    <!-- Reset and Undo Buttons -->
+    <div class="button-container">
+      <button id="start-button">Start Puzzle</button>
+      <div id="timer">Time: 00:00</div>
+      <button id="reset-button">Reset Puzzle</button>
+      <button id="undo-button">Undo</button>
+      <div id="solved-message" class="hidden">
+        Puzzle Solved! Time taken: <span id="time-taken"></span>
+      </div>
+    </div>
+    <button id="solve-button">Solve Puzzle</button>
+    <script src="app.js"></script>
+  </body>
+</html>

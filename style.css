@@ -1,0 +1,318 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2rem; /* Responsive font size */
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px; /* Space between grid and reference image */
+  width: 100%;
+  max-width: 1200px; /* Limit maximum width for larger screens */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Responsive grid */
+  gap: 2px;
+  background-color: #f5ece0;
+  padding: 10px;
+  border: 2px solid #000;
+  width: 100%;
+  max-width: 400px; /* Larger grid for laptop/desktop */
+}
+
+.cell {
+  aspect-ratio: 1; /* Ensure cells are square */
+  border: 2px solid #000;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reference {
+  text-align: center;
+  max-width: 400px; /* Larger reference image for laptop/desktop */
+}
+
+.reference img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #000;
+}
+
+.reference p {
+  margin-top: 10px;
+  font-size: 1.2rem; /* Responsive font size */
+  font-weight: bold;
+}
+
+.pieces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 800px; /* Adjust pieces container size for smaller screens */
+}
+
+.pieces,
+.cell {
+  position: relative; /* Required for absolute positioning of child elements */
+}
+
+.piece {
+  width: 100px; /* Larger pieces for laptop/desktop */
+  height: 100px;
+  border: 2px solid #000;
+  cursor: grab;
+  transition: transform 0.5s ease, left 0.5s ease, top 0.5s ease;
+}
+
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Space between elements */
+  margin-top: 5px;
+}
+
+#reset-button,
+#undo-button {
+  padding: 10px 20px;
+  font-size: 1rem; /* Responsive font size */
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin: 10px 5px; /*Add margin for spacing*/
+}
+
+#reset-button:hover {
+  background-color: #0056b3;
+}
+
+#undo-button {
+  background-color: #28a745;
+}
+
+#undo-button:hover {
+  background-color: #218838;
+}
+
+/* Start Button */
+#start-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #ff9800; /* Orange color */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin: 10px 5px;
+}
+
+#start-button:hover {
+  background-color: #e68900; /* Darker orange on hover */
+}
+
+#start-button:disabled {
+  background-color: #ccc; /* Gray when disabled */
+  cursor: not-allowed;
+}
+
+
+/* Puzzle Solved Message */
+#solved-message {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: green;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Timer Display */
+#timer {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
+#solve-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#solve-button:hover {
+  background-color: #45a049;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem; /* Smaller font size for tablets */
+  }
+
+  .grid {
+    max-width: 300px; /* Smaller grid for tablets */
+  }
+
+  .piece {
+    width: 90px; /* Smaller pieces for tablets */
+    height: 90px;
+  }
+
+  .reference img {
+    max-width: 300px; /* Smaller reference image for tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.2rem; /* Smaller font size for mobile */
+  }
+
+  .grid {
+    max-width: 250px; /* Smaller grid for mobile */
+  }
+
+  .piece {
+    width: 70px; /* Smaller pieces for mobile */
+    height: 70px;
+  }
+
+  .reference img {
+    max-width: 250px; /* Smaller reference image for mobile */
+  }
+
+  .container {
+    gap: 20px; /* Reduce gap for smaller screens */
+  }
+}
+@media (min-width: 480px) and (max-width: 767px){
+   h1 {
+    font-size: 2.0rem; /* Smaller font size for tablets */
+  }
+
+  .grid {
+    max-width: 300px; /* Smaller grid for tablets */
+  }
+
+  .piece {
+    width: 88px; /* Smaller pieces for tablets */
+    height: 88px;
+  }
+
+  .reference img {
+    max-width: 300px; /* Smaller reference image for tablets */
+  }  
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  h1 {
+    font-size: 1.8rem; /* Larger font size for laptops */
+  }
+
+  .grid {
+    max-width:330px; /* Larger grid for laptops */
+  }
+
+  .piece {
+    width: 98px; /* Larger pieces for laptops */
+    height: 98px;
+  }
+
+  .reference img {
+    max-width: 330px; /* Larger reference image for laptops */
+  }
+
+  .container {
+    gap: 60px; /* Increase gap for laptops */
+  }
+}
+
+/* Laptop Screens (1024px) */
+@media (min-width: 1024px) and (max-width: 1919px) {
+  h1 {
+    font-size: 1.8rem; /* Larger font size for laptops */
+  }
+
+  .grid {
+    max-width:330px; /* Larger grid for laptops */
+  }
+
+  .piece {
+    width: 98px; /* Larger pieces for laptops */
+    height: 98px;
+  }
+
+  .reference img {
+    max-width: 330px; /* Larger reference image for laptops */
+  }
+
+  .container {
+    gap: 60px; /* Increase gap for laptops */
+  }
+}
+
+/* Desktop Screens (1920px and above) */
+@media (min-width: 1920px) {
+  h1 {
+    font-size: 2.5rem; /* Larger font size for laptops */
+  }
+
+  .grid {
+    max-width: 458px; /* Larger grid for laptops */
+  }
+
+  .piece {
+    width: 140px; /* Larger pieces for laptops */
+    height: 140px;
+  }
+
+  .reference img {
+    max-width: 500px; /* Larger reference image for laptops */
+  }
+
+  .container {
+    gap: 60px; /* Increase gap for laptops */
+  }
+}
