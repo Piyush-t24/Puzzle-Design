@@ -168,6 +168,9 @@ pieces.forEach((piece) => {
       const rect = draggedPiece.getBoundingClientRect();
       touchOffsetX = touch.clientX - rect.left;
       touchOffsetY = touch.clientY - rect.top;
+      // Bring the dragged piece to the front
+      draggedPiece.style.zIndex = "1000";
+      console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
       console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
     }
   });
@@ -177,7 +180,7 @@ document.addEventListener("touchmove", (e) => {
   if (draggedPiece) {
     e.preventDefault();
     const touch = e.touches[0];
-    draggedPiece.style.position = "absolute";
+    draggedPiece.style.position = "fixed";
     draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
     draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
   }
@@ -186,6 +189,7 @@ document.addEventListener("touchmove", (e) => {
 document.addEventListener("touchend", () => {
   if (draggedPiece) {
     draggedPiece.style.position = "static";
+    draggedPiece.style.zIndex = "auto";
     draggedPiece = null;
   }
 });
@@ -354,6 +358,4 @@ solveButton.addEventListener("click", async () => {
   }
 });
 
-
-// Touch feature
 
