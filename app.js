@@ -159,6 +159,7 @@ cells.forEach((cell) => {
 //  Handle Touch Movement
 let touchOffsetX = 0;
 let touchOffsetY = 0;
+let isDragging = false;
 
 pieces.forEach((piece) => {
   piece.addEventListener("touchstart", (e) => {
@@ -169,28 +170,33 @@ pieces.forEach((piece) => {
       touchOffsetX = touch.clientX - rect.left;
       touchOffsetY = touch.clientY - rect.top;
       // Bring the dragged piece to the front
-      draggedPiece.style.zIndex = "1000";
-      console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
-      console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
+       draggedPiece.style.zIndex = "1000";
+       isDragging = true; // Start dragging
+       console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
     }
   });
 });
 
-document.addEventListener("touchmove", (e) => {
-  if (draggedPiece) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    draggedPiece.style.position = "fixed";
-    draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
-    draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
-  }
-});
+document.addEventListener(
+  "touchmove",
+  (e) => {
+    if (isDragging) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      draggedPiece.style.position = "fixed";
+      draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
+      draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
+    }
+  },
+  { passive: false }
+);
 
 document.addEventListener("touchend", () => {
   if (draggedPiece) {
     draggedPiece.style.position = "static";
     draggedPiece.style.zIndex = "auto";
     draggedPiece = null;
+    isDragging = false;
   }
 });
 
