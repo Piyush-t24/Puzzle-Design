@@ -183,7 +183,37 @@ h1 {
   background-color: #45a049;
 }
 
+/* Rules Box */
+.rules-box {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-width: 500px;
+  text-align: left;
+}
 
+.rules-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.rules-box ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.rules-box li {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.rules-box strong {
+  color: #007bff;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

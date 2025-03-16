@@ -6,6 +6,7 @@ const startButton = document.getElementById("start-button");
 const timerDisplay = document.getElementById("timer");
 const solvedMessage = document.getElementById("solved-message");
 const timeTaken = document.getElementById("time-taken");
+const solveButton = document.getElementById("solve-button");
 
 let draggedPiece = null;
 const moveStack = []; // Stack to track moves
@@ -201,4 +202,93 @@ pieces.forEach((piece) => {
       checkPuzzleSolved();
     }
   });
+});
+
+// Backtracking Algorithm to solve
+
+// Function to check if a piece can be placed in a cell
+function isValidPlacement(piece, cell) {
+  const pieceId = piece.getAttribute("data-id");
+  const cellId = cell.id.split("-")[1];
+  return pieceId === cellId;
+}
+
+// Function to highlight the current piece and cell
+function highlightCurrent(piece, cell) {
+  piece.style.border = "2px solid red";
+  cell.style.backgroundColor = "lightyellow";
+}
+
+// Function to remove highlights
+function removeHighlights() {
+  pieces.forEach((piece) => (piece.style.border = ""));
+  cells.forEach((cell) => (cell.style.backgroundColor = ""));
+}
+
+// Function to highlight conflicts
+function highlightConflict(piece, cell) {
+  piece.style.border = "2px solid red";
+  cell.style.backgroundColor = "lightcoral";
+}
+
+// Backtracking solver with visualization
+async function solvePuzzleWithVisualization() {
+  const piecesArray = Array.from(pieces);
+  const cellsArray = Array.from(cells);
+
+  async function backtrack(index) {
+    if (index === piecesArray.length) {
+      removeHighlights();
+      return true; // Puzzle solved
+    }
+
+    const piece = piecesArray[index];
+    for (let cell of cellsArray) {
+      if (!cell.firstChild) {
+        for (let rotation = 0; rotation < 360; rotation += 90) {
+          // Highlight the current piece and cell
+          highlightCurrent(piece, cell);
+
+          // Apply rotation and placement
+          piece.style.transform = `rotate(${rotation}deg)`;
+          cell.appendChild(piece);
+
+          // Delay for visualization
+          await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+
+          if (isValidPlacement(piece, cell)) {
+            if (await backtrack(index + 1)) {
+              return true;
+            }
+          } else {
+            // Highlight conflict
+            highlightConflict(piece, cell);
+            await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+          }
+
+          // Backtrack: Remove the piece and reset highlights
+          cell.removeChild(piece);
+          removeHighlights();
+        }
+      }
+    }
+    return false; // No solution found
+  }
+
+  return backtrack(0);
+}
+
+// Solve button event listener
+solveButton.addEventListener("click", async () => {
+  if (isPuzzleStarted) {
+    const isSolved = await solvePuzzleWithVisualization();
+    if (isSolved) {
+      console.log("Puzzle solved!");
+      checkPuzzleSolved(); // Update the UI to show the puzzle is solved
+    } else {
+      console.log("No solution found.");
+    }
+  } else {
+    console.log("Start the puzzle first!");
+  }
 });
