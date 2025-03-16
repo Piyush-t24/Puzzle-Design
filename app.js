@@ -176,7 +176,7 @@ pieces.forEach((piece) => {
     }
   });
 });
-
+// Prevent scrolling during dragging
 document.addEventListener(
   "touchmove",
   (e) => {
@@ -193,6 +193,32 @@ document.addEventListener(
 
 document.addEventListener("touchend", () => {
   if (draggedPiece) {
+    // Find the cell under the dropped piece
+    const touch = e.changedTouches[0];
+    const elementUnderDrop = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY
+    );
+
+    // Check if the element under the drop is a cell
+    if (
+      elementUnderDrop &&
+      elementUnderDrop.classList.contains("cell") &&
+      !elementUnderDrop.firstChild
+    ) {
+      // Move the piece to the cell
+      elementUnderDrop.appendChild(draggedPiece);
+
+      // Record the move
+      const source = draggedPiece.parentElement; // Source container
+      const destination = elementUnderDrop; // Destination cell
+      moveStack.push({ tile: draggedPiece, source, destination });
+
+      // Check if the puzzle is solved
+      checkPuzzleSolved();
+    }
+
+    // Reset styles after dropping
     draggedPiece.style.position = "static";
     draggedPiece.style.zIndex = "auto";
     draggedPiece = null;
