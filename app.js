@@ -7,9 +7,10 @@ const timerDisplay = document.getElementById("timer");
 const solvedMessage = document.getElementById("solved-message");
 const timeTaken = document.getElementById("time-taken");
 const solveButton = document.getElementById("solve-button");
+const solvedSound = new Audio("./assets/sounds/win.mp3");
 
 let draggedPiece = null;
-const moveStack = []; // Stack to track moves
+const moveStack = [];
 let timerInterval = null;
 let startTime = null;
 let isPuzzleStarted = false;
@@ -44,10 +45,10 @@ function initializePuzzle() {
 
   // Append shuffled pieces to the .pieces container
   const piecesContainer = document.querySelector(".pieces");
-  piecesContainer.innerHTML = ""; // Clear existing pieces
+  piecesContainer.innerHTML = "";
   piecesArray.forEach((piece) => {
     piecesContainer.appendChild(piece);
-    rotateRandom(piece); // Randomly rotate the piece
+    rotateRandom(piece);
   });
 
   // Clear the move stack
@@ -56,9 +57,9 @@ function initializePuzzle() {
 
 // Initialize the puzzle when the page loads
 window.addEventListener("load", () => {
-  console.log("Page loaded"); // Debugging
+  console.log("Page loaded");
   initializePuzzle();
-  // Disable dragging for pieces initially
+
   pieces.forEach((piece) => {
     piece.draggable = false;
   });
@@ -66,16 +67,16 @@ window.addEventListener("load", () => {
 
 // Start Puzzle
 startButton.addEventListener("click", () => {
-  console.log("Start button clicked"); // Debugging
+  console.log("Start button clicked");
   if (!isPuzzleStarted) {
     isPuzzleStarted = true;
-    startButton.disabled = true; // Disable start button after clicking
+    startButton.disabled = true;
     startTimer();
 
     // Enable dragging for pieces
     pieces.forEach((piece) => {
       piece.draggable = true;
-      console.log(`Piece ${piece.getAttribute("data-id")} is now draggable`); // Debugging
+      console.log(`Piece ${piece.getAttribute("data-id")} is now draggable`);
     });
   }
 });
@@ -103,7 +104,7 @@ pieces.forEach((piece) => {
   piece.addEventListener("dragstart", (e) => {
     if (isPuzzleStarted) {
       draggedPiece = e.target;
-      console.log(`Dragging piece ${draggedPiece.getAttribute("data-id")}`); // Debugging
+      console.log(`Dragging piece ${draggedPiece.getAttribute("data-id")}`);
     }
   });
 });
@@ -116,15 +117,13 @@ cells.forEach((cell) => {
   cell.addEventListener("drop", (e) => {
     if (isPuzzleStarted && draggedPiece && !cell.firstChild) {
       // Record the move
-      const source = draggedPiece.parentElement; // Source container
-      const destination = cell; // Destination cell
+      const source = draggedPiece.parentElement;
+      const destination = cell;
       moveStack.push({ tile: draggedPiece, source, destination });
 
-      // Move the tile
       destination.appendChild(draggedPiece);
       draggedPiece = null;
 
-      // Check if the puzzle is solved
       checkPuzzleSolved();
     }
   });
@@ -175,6 +174,11 @@ function checkPuzzleSolved() {
     const elapsedTime = timerDisplay.textContent;
     timeTaken.textContent = elapsedTime;
     solvedMessage.classList.remove("hidden");
+
+    // Play the solved sound effect
+    solvedSound.play().catch((error) => {
+      console.error("Error playing sound:", error);
+    });
   }
 }
 
@@ -193,12 +197,11 @@ pieces.forEach((piece) => {
         currentRotation = Math.round(Math.atan2(b, a) * (180 / Math.PI));
       }
 
-      console.log(`Current Rotation: ${currentRotation}°`); // Debugging
+      console.log(`Current Rotation: ${currentRotation}°`);
 
       const newRotation = (currentRotation + 90) % 360;
       piece.style.transform = `rotate(${newRotation}deg)`;
 
-      // Check if the puzzle is solved after rotation
       checkPuzzleSolved();
     }
   });
@@ -239,31 +242,28 @@ async function solvePuzzleWithVisualization() {
   async function backtrack(index) {
     if (index === piecesArray.length) {
       removeHighlights();
-      return true; // Puzzle solved
+      return true;
     }
 
     const piece = piecesArray[index];
     for (let cell of cellsArray) {
       if (!cell.firstChild) {
         for (let rotation = 0; rotation < 360; rotation += 90) {
-          // Highlight the current piece and cell
           highlightCurrent(piece, cell);
 
-          // Apply rotation and placement
           piece.style.transform = `rotate(${rotation}deg)`;
           cell.appendChild(piece);
 
           // Delay for visualization
-          await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+          await new Promise((resolve) => setTimeout(resolve, 500));
 
           if (isValidPlacement(piece, cell)) {
             if (await backtrack(index + 1)) {
               return true;
             }
           } else {
-            // Highlight conflict
             highlightConflict(piece, cell);
-            await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+            await new Promise((resolve) => setTimeout(resolve, 500));
           }
 
           // Backtrack: Remove the piece and reset highlights
@@ -272,7 +272,7 @@ async function solvePuzzleWithVisualization() {
         }
       }
     }
-    return false; // No solution found
+    return false;
   }
 
   return backtrack(0);
@@ -284,7 +284,7 @@ solveButton.addEventListener("click", async () => {
     const isSolved = await solvePuzzleWithVisualization();
     if (isSolved) {
       console.log("Puzzle solved!");
-      checkPuzzleSolved(); // Update the UI to show the puzzle is solved
+      checkPuzzleSolved();
     } else {
       console.log("No solution found.");
     }
