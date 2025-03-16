@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   text-align: center;
   background-color: #f0f0f0;
   margin: 0;
@@ -19,54 +19,65 @@ body {
 
 h1 {
   margin-bottom: 20px;
-  font-size: 2rem; /* Responsive font size */
+  font-size: 2.5rem;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .container {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px; /* Space between grid and reference image */
+  gap: 40px;
   width: 100%;
-  max-width: 1200px; /* Limit maximum width for larger screens */
+  max-width: 1200px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Responsive grid */
+  grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   background-color: #f5ece0;
   padding: 10px;
   border: 2px solid #000;
   width: 100%;
-  max-width: 400px; /* Larger grid for laptop/desktop */
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .cell {
-  aspect-ratio: 1; /* Ensure cells are square */
+  aspect-ratio: 1;
   border: 2px solid #000;
   background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.cell:hover {
+  background-color: #f0f8ff;
 }
 
 .reference {
   text-align: center;
-  max-width: 400px; /* Larger reference image for laptop/desktop */
+  max-width: 400px;
 }
 
 .reference img {
   width: 100%;
   height: auto;
   border: 2px solid #000;
+  /* border-radius: 10px; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .reference p {
   margin-top: 10px;
-  font-size: 1.2rem; /* Responsive font size */
+  font-size: 1.2rem;
   font-weight: bold;
+  color: #555;
 }
 
 .pieces {
@@ -76,46 +87,66 @@ h1 {
   gap: 10px;
   margin: 10px 0;
   width: 100%;
-  max-width: 800px; /* Adjust pieces container size for smaller screens */
-}
-
-.pieces,
-.cell {
-  position: relative; /* Required for absolute positioning of child elements */
+  max-width: 800px;
 }
 
 .piece {
-  width: 100px; /* Larger pieces for laptop/desktop */
+  width: 100px;
   height: 100px;
   border: 2px solid #000;
   cursor: grab;
-  transition: transform 0.5s ease, left 0.5s ease, top 0.5s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* border-radius: 10px; */
 }
 
+.piece:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
 
 .button-container {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* Space between elements */
-  margin-top: 5px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 #reset-button,
-#undo-button {
+#undo-button,
+#start-button,
+#solve-button {
   padding: 10px 20px;
-  font-size: 1rem; /* Responsive font size */
+  font-size: 1rem;
   cursor: pointer;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
-  margin: 10px 5px; /*Add margin for spacing*/
+  margin: 10px 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#reset-button:hover {
+#reset-button:hover,
+#undo-button:hover,
+#start-button:hover,
+#solve-button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+#start-button {
+  background-color: #ff9800;
+}
+
+#start-button:hover {
+  background-color: #e68900;
+}
+
+#start-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 #undo-button {
@@ -126,27 +157,13 @@ h1 {
   background-color: #218838;
 }
 
-/* Start Button */
-#start-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: #ff9800; /* Orange color */
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  margin: 10px 5px;
+#solve-button {
+  background-color: #4CAF50;
 }
 
-#start-button:hover {
-  background-color: #e68900; /* Darker orange on hover */
+#solve-button:hover {
+  background-color: #45a049;
 }
-
-#start-button:disabled {
-  background-color: #ccc; /* Gray when disabled */
-  cursor: not-allowed;
-}
-
 
 /* Puzzle Solved Message */
 #solved-message {
@@ -154,6 +171,16 @@ h1 {
   font-size: 1.5rem;
   font-weight: bold;
   color: green;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .hidden {
@@ -165,33 +192,19 @@ h1 {
   margin-top: 10px;
   font-size: 1.2rem;
   font-weight: bold;
-}
-
-
-#solve-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-#solve-button:hover {
-  background-color: #45a049;
+  color: #333;
 }
 
 /* Rules Box */
 .rules-box {
   margin-top: 20px;
-  padding: 15px;
+  padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 10px;
   max-width: 500px;
   text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .rules-box h2 {
@@ -214,6 +227,7 @@ h1 {
 .rules-box strong {
   color: #007bff;
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
