@@ -107,6 +107,14 @@ pieces.forEach((piece) => {
       console.log(`Dragging piece ${draggedPiece.getAttribute("data-id")}`);
     }
   });
+
+  // Touch events
+  piece.addEventListener("touchstart", (e) => {
+    if (isPuzzleStarted) {
+      draggedPiece = e.target;
+      console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
+    }
+  });
 });
 
 cells.forEach((cell) => {
@@ -127,6 +135,59 @@ cells.forEach((cell) => {
       checkPuzzleSolved();
     }
   });
+  // Touch events
+  cell.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+  });
+   cell.addEventListener("touchend", (e) => {
+     if (isPuzzleStarted && draggedPiece && !cell.firstChild) {
+       
+       const source = draggedPiece.parentElement; 
+       const destination = cell; 
+       moveStack.push({ tile: draggedPiece, source, destination });
+
+       
+       destination.appendChild(draggedPiece);
+       draggedPiece = null;
+
+     
+       checkPuzzleSolved();
+     }
+   });
+});
+
+//  Handle Touch Movement
+let touchOffsetX = 0;
+let touchOffsetY = 0;
+
+pieces.forEach((piece) => {
+  piece.addEventListener("touchstart", (e) => {
+    if (isPuzzleStarted) {
+      draggedPiece = e.target;
+      const touch = e.touches[0];
+      const rect = draggedPiece.getBoundingClientRect();
+      touchOffsetX = touch.clientX - rect.left;
+      touchOffsetY = touch.clientY - rect.top;
+      console.log(`Touching piece ${draggedPiece.getAttribute("data-id")}`);
+    }
+  });
+});
+
+document.addEventListener("touchmove", (e) => {
+  if (draggedPiece) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    draggedPiece.style.position = "absolute";
+    draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
+    draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
+  }
+});
+
+document.addEventListener("touchend", () => {
+  if (draggedPiece) {
+    draggedPiece.style.position = "static";
+    draggedPiece = null;
+  }
 });
 
 // Undo Functionality
@@ -292,3 +353,7 @@ solveButton.addEventListener("click", async () => {
     console.log("Start the puzzle first!");
   }
 });
+
+
+// Touch feature
+
