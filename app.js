@@ -159,6 +159,7 @@ cells.forEach((cell) => {
 //  Handle Touch Movement
 let touchOffsetX = 0;
 let touchOffsetY = 0;
+let isDragging = false;
 
 pieces.forEach((piece) => {
   piece.addEventListener("touchstart", (e) => {
@@ -176,15 +177,19 @@ pieces.forEach((piece) => {
   });
 });
 
-document.addEventListener("touchmove", (e) => {
-  if (draggedPiece) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    draggedPiece.style.position = "fixed";
-    draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
-    draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
-  }
-});
+document.addEventListener(
+  "touchmove",
+  (e) => {
+    if (isDragging) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      draggedPiece.style.position = "fixed";
+      draggedPiece.style.left = `${touch.clientX - touchOffsetX}px`;
+      draggedPiece.style.top = `${touch.clientY - touchOffsetY}px`;
+    }
+  },
+  { passive: false }
+);
 
 document.addEventListener("touchend", (e) => {
   if (draggedPiece) {
@@ -217,6 +222,7 @@ document.addEventListener("touchend", (e) => {
     draggedPiece.style.position = "static";
     draggedPiece.style.zIndex = "auto";
     draggedPiece = null;
+    isDragging = false;
   }
 });
 
